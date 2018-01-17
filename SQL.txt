@@ -1,0 +1,23 @@
+Converting strings into dates while loading data using LOAD DATA INFILE:
+
+In the following example, we are trying to convert the data in the file for date columns col3, col4 in formats 'mm/dd/yyyy', 'dd/mm/yyyy' into MySQL standard YYYY-mm-dd respectively.
+
+load data infile '/tmp/xxx.dat'
+into table xxx
+fields terminated by '|'
+lines terminated by '\n'
+(col1,
+col2,
+@col3,
+@col4,
+col5)
+set
+col3 = str_to_date(@col3, '%m/%d/%Y'),
+col4 = str_to_date(@col4, '%d/%m/%Y')
+;
+
+You could convert into any format you want by using the date_format function around the str_to_date().
+
+Example:
+...
+set col2 = date_format(str_to_date(@col2, 'format'), 'your format')
