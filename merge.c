@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 int ans[10000000];
 void merge1(int a[],int b[],int n,int m,int q1,int q2)//when one set is in increasing order and the other one being in decreasing order
 {
@@ -133,6 +134,7 @@ void merge1(int a[],int b[],int n,int m,int q1,int q2)//when one set is in incre
 			}
 		}
 	}
+	return;
 
 }
 void merge2(int a[],int b[],int n,int m)//when both sets are in increasing order
@@ -196,6 +198,7 @@ void merge2(int a[],int b[],int n,int m)//when both sets are in increasing order
 			}	
 		}
 	}
+	return;
 }
 void merge3(int a[],int b[],int n,int m)//when both the sets are in decreasing order
 {
@@ -260,14 +263,20 @@ void merge3(int a[],int b[],int n,int m)//when both the sets are in decreasing o
 			}
 		}
 	}
-
+return;
 }
 int main()
 {
+	clock_t t1,t2,t3,t4;
+	
+	t1=clock();
 	int n,m,i;
-	scanf("%d%d",&n,&m);
-	int a[n],b[m],q1=0,q2=0;//q1=0 implies first set is in decreasing order and similarly q2=0 implies second set is in decreasing order 
+	int a[1000],b[1000],q1=0,q2=0;//q1=0 implies first set is in decreasing order and similarly q2=0 implies second set is in decreasing order 
 //q1=1 implies first set is in increasing order and q2=1 implies second set is in increasing order
+	t2=clock();
+	scanf("%d%d",&n,&m);
+
+	
     for(i=0;i<n;i++)
 	{
 		scanf("%d",&a[i]);
@@ -284,6 +293,7 @@ int main()
 			q2=1;
 		}
 	}
+	t3=clock();
 	if((q1==1 && q2==0)||(q1==0&&q2==1))
 	{
 		merge1(a,b,n,m,q1,q2);
@@ -300,5 +310,7 @@ int main()
 	{
 		printf("%d ",ans[i]);
 	}
+	t4=clock();
+	printf("\nTime taken to print combined array = %d",t4-t3+t2-t1);
 	return 0;
 }
