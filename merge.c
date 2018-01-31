@@ -270,47 +270,56 @@ int main()
 	clock_t t1,t2,t3,t4;
 	
 	t1=clock();
-	int n,m,i;
+	int n,m,i,t=15;
 	int a[1000],b[1000],q1=0,q2=0;//q1=0 implies first set is in decreasing order and similarly q2=0 implies second set is in decreasing order 
 //q1=1 implies first set is in increasing order and q2=1 implies second set is in increasing order
 	t2=clock();
-	scanf("%d%d",&n,&m);
-
-	
-    for(i=0;i<n;i++)
-	{
-		scanf("%d",&a[i]);
-		if(i>0 && a[i]>a[i-1])
-		{
-			q1=1;
+	FILE *fd=fopen("input.txt","w");
+	while(t>0){
+		if(t%5==0){
+			fprintf(fd,"#n+m    t\n");
 		}
-	}
-	for(i=0;i<m;i++)
-	{
-		scanf("%d",&b[i]);
-		if(i>0 && b[i]>b[i-1])
+		printf("Enter the size of the two sets:\n");
+		scanf("%d%d",&n,&m);
+		printf("Enter the elements of first set:\n");
+		for(i=0;i<n;i++)
 		{
-			q2=1;
+			scanf("%d",&a[i]);
+			if(i>0 && a[i]>a[i-1])
+			{
+				q1=1;
+			}
 		}
+		printf("Enter the elements of first set:\n");
+		for(i=0;i<m;i++)
+		{
+			scanf("%d",&b[i]);
+			if(i>0 && b[i]>b[i-1])
+			{
+				q2=1;
+			}
+		}
+		t3=clock();
+		if((q1==1 && q2==0)||(q1==0&&q2==1))
+		{
+			merge1(a,b,n,m,q1,q2);
+		}
+		else if(q1==1 && q2==1)
+		{
+			merge2(a,b,n,m);
+		}
+		else
+		{
+			merge3(a,b,n,m);
+		}
+		for(i=0;i<(n+m);i++)
+		{
+			printf("%d ",ans[i]);
+		}
+		t4=clock();
+		fprintf(fd,"%d    %ld\n",(n+m),(t4-t3+t2+t1));
+		//printf("\nTime taken to print combined array = %d\n",t4-t3+t2-t1);
+		t--;
 	}
-	t3=clock();
-	if((q1==1 && q2==0)||(q1==0&&q2==1))
-	{
-		merge1(a,b,n,m,q1,q2);
-	}
-	else if(q1==1 && q2==1)
-	{
-		merge2(a,b,n,m);
-	}
-	else
-	{
-		merge3(a,b,n,m);
-	}
-	for(i=0;i<(n+m);i++)
-	{
-		printf("%d ",ans[i]);
-	}
-	t4=clock();
-	printf("\nTime taken to print combined array = %d",t4-t3+t2-t1);
 	return 0;
 }
