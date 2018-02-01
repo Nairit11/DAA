@@ -1,5 +1,17 @@
+#include <unistd.h>
+#include <stdlib.h>
 #include <stdio.h>
+#include <sys/time.h>
 #include <time.h>
+
+
+double CTimer() {
+	struct timeval tm;
+
+	gettimeofday(&tm,NULL);
+	return((double)tm.tv_usec)/1000000.0;
+}
+
 int ans[10000000];
 void merge1(int a[],int b[],int n,int m,int q1,int q2)//when one set is in increasing order and the other one being in decreasing order
 {
@@ -267,39 +279,43 @@ return;
 }
 int main()
 {
-	clock_t t1,t2,t3,t4;
+	double t1,t2,t3,t4,tim,sum=0;
 	
-	t1=clock();
-	int n,m,i,t=15;
+	t1=CTimer();
+	int n,m,i,t=24,ctr=0;
 	int a[1000],b[1000],q1=0,q2=0;//q1=0 implies first set is in decreasing order and similarly q2=0 implies second set is in decreasing order 
 //q1=1 implies first set is in increasing order and q2=1 implies second set is in increasing order
-	t2=clock();
-	FILE *fd=fopen("input.txt","w");
-	while(t>0){
-		if(t%5==0){
-			fprintf(fd,"#n+m    t\n");
-		}
-		printf("Enter the size of the two sets:\n");
-		scanf("%d%d",&n,&m);
-		printf("Enter the elements of first set:\n");
+	t2=CTimer();
+	FILE *fd1,*fd2,*fd3,*fp;
+	fd1=fopen("input1.txt","w");
+	fd2=fopen("input2.txt","w");
+	fd3=fopen("input3.txt","w");
+	fp=fopen("main_input.txt","r");
+
+	while(t>0 && feof(fp)!=-1){
+		q1=0;q2=0;	
+		//printf("Enter the size of the two sets:\n");
+		fscanf(fp,"%d%d",&n,&m);
+
+		//printf("Enter the elements of first set:\n");
 		for(i=0;i<n;i++)
 		{
-			scanf("%d",&a[i]);
+			fscanf(fp,"%d",&a[i]);
 			if(i>0 && a[i]>a[i-1])
 			{
 				q1=1;
 			}
 		}
-		printf("Enter the elements of first set:\n");
+		//printf("Enter the elements of first set:\n");
 		for(i=0;i<m;i++)
 		{
-			scanf("%d",&b[i]);
+			fscanf(fp,"%d",&b[i]);
 			if(i>0 && b[i]>b[i-1])
 			{
 				q2=1;
 			}
 		}
-		t3=clock();
+		t3=CTimer();
 		if((q1==1 && q2==0)||(q1==0&&q2==1))
 		{
 			merge1(a,b,n,m,q1,q2);
@@ -312,14 +328,35 @@ int main()
 		{
 			merge3(a,b,n,m);
 		}
-		for(i=0;i<(n+m);i++)
-		{
-			printf("%d ",ans[i]);
+		
+		t4=CTimer();
+		tim=t4-t3+t2+t1;
+		if(t<=16){
+			sum+=tim;
+			ctr++;
+			if(ctr==4){
+				ctr=0;
+				tim=sum/4;
+				sum=0;
+				fprintf(fd3,"%d	%lf\n",(n+m),tim);
+			}
+			
 		}
-		t4=clock();
-		fprintf(fd,"%d    %ld\n",(n+m),(t4-t3+t2+t1));
+		if(t>20)	
+			fprintf(fd1,"%d    %lf\n",(n+m),tim);
+		else if(t>16 && t<=20)
+			fprintf(fd2,"%d    %lf\n",(n+m),tim);
 		//printf("\nTime taken to print combined array = %d\n",t4-t3+t2-t1);
 		t--;
 	}
+	fclose(fd1);
+	fclose(fd2);
+	fclose(fd3);
+	fclose(fp);
+	const char* script="~/myscript.sh";
+	printf("Files input1.txt, input2.txt and input3.txt are created with data for plotting graphs for best, worst and average running time respectively\n");
+	printf("Plotting the running time graphs.....\n");
+	sleep(1);
+	system(script);
 	return 0;
 }
