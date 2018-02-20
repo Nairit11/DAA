@@ -19,36 +19,41 @@ double f(double x)    //define the function here, ie give the equation
 int main()
 {
 double i=0; 
-tim=tim+1;
 cout.precision(8);
-tim=tim+1;
 cout.setf(ios::fixed);
-tim=tim+1;
-FILE *f1;
-tim=tim+1;
-f1=fopen("output.txt","w");    //set the precision of the output
-tim=tim+1;
+FILE *f1,*f2,*f3,*f4,*f5;
+f1=fopen("accuracy.txt","w");    //set the precision of the output
+f2=fopen("input.txt","r");
+f3=fopen("best.txt","w");
+f4=fopen("average.txt","w");
+f5=fopen("worst.txt","w");
 double a,b,c,e;
-cin>>n;
-tim=tim+1;
-tim=tim+1;
+int ctr=12;
+loop: 
+while(ctr>0){
+tim=0;
+fscanf(f2,"%lf",&n);
+tim=tim+2;
 if(n==0)
 {
 	cout<<"Roots are both = 0"<<endl;
-	tim=tim+2;	
-	return 0;
+	tim=tim+2;
+	fprintf(f3,"%lf    %d\n",n,tim);
+	tim=0;
+	ctr--;	
+	goto loop;
 }
 tim=tim+1;
-else if(n<0)
+if(n<0)
 {
 	cout<<"Roots are both imaginary"<<endl;
-	tim=tim+2;	
-	return 0;
+	tim=tim+2;
+	fprintf(f3,"%lf    %d\n",n,tim);
+	tim=0;
+	ctr--;	
+	goto loop;
 }
-/*cout<<"Enter the initial guess\na=";
-cin>>b;
-cout<<"b=\n";                //take an intial guess
-cin>>c;*/
+
 tim=tim+1;
 while(f(i)<=0){
     tim=tim+2;
@@ -73,14 +78,30 @@ do
         cout<<"\nThe root of the equation is "<<c;    //print the root
         fprintf(f1,"%d %0.4lf\n",t,abs(f(c))*100);        
 	tim=tim+5;	
-	return 0;
+	goto label;
     }
     tim=tim+3;
     fprintf(f1,"%d %0.4lf\n",t,abs(f(c))*100);
     tim=tim+3;
 }while(abs(c-b)>=e);            //check if the error is greater than the desired accuracy
-cout<<"\nThe root of the equation is "<<c;    //print the root
+cout<<"\nThe root of the equation is "<< c << endl;    //print the root
 tim=tim+1;
+tim=tim+2;
+cout << "mcbc"<< endl;
+label:
+if(ctr<9 && ctr>4)
+    fprintf(f4,"%lf    %d\n",n,tim);
+else if(ctr<5)
+    fprintf(f5,"%lf    %d\n",n,tim);
+
+ctr--;
+tim=0;
+}
+fclose(f1);
+fclose(f2);
+fclose(f3);
+fclose(f4);
+fclose(f5);
 return 0;
 }
 
