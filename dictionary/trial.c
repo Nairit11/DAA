@@ -76,12 +76,13 @@ void Search(char data[]){
     	    curl_easy_setopt(curl, CURLOPT_URL, str);
     
             curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-            curl_easy_setopt(curl, CURLOPT_NOBODY,1L);
+            //curl_easy_setopt(curl, CURLOPT_READDATA, meaning);
+	    
     	    res = curl_easy_perform(curl);
+
             if(res != CURLE_OK)
                 fprintf(stderr, "curl_easy_perform() failed: %s\n",
             curl_easy_strerror(res));
-  
     curl_easy_cleanup(curl);
     }
 }
@@ -205,19 +206,21 @@ int main()
         		}
 				t=t+1;
         		if(!f){
+				printf("\n\nWORD : ");
         			for(j=0;j<l;j++)
         			{
             			arr[length].tar[j]=data[j];
             			t=t+5;
-            			//printf("%c", data[j]);
+            			printf("%c", data[j]);
         				t=t+2;
         			}
-					//Search(data);
+				printf("\nMEANING : ");
+					Search(data);
         			arr[length].len = l;
         			t=t+3;
         			length++;
         			t=t+1;
-        			//printf("\n");
+        			
         			t=t+1;
     			}
    				t=t+1;     
